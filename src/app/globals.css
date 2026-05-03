@@ -145,7 +145,7 @@ button {
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   background: rgba(7, 6, 13, 0.55);
-  border-bottom: 1px solid var(--border);
+  /* border-bottom: 1px solid var(--border); */
 }
 .nav-inner {
   display: flex;

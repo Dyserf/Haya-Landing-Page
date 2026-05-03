@@ -95,7 +95,7 @@ export function HomePage() {
 
 export function Nav() {
   return (
-    <nav className="nav">
+    <nav className="nav backdrop-blur-xs">
       <div className="container nav-inner">
         <a className="logo" href="#">
           <span className="logo-mark">
