@@ -1,22 +1,35 @@
-import { ArrowLeft, ArrowRight } from "iconsax-reactjs";
+import { ArrowRightIcon } from "lucide-react";
+import Image from "next/image";
 import React from "react";
+import type { HAYA_TWEAKS_DEFAULTS } from "@/config/tweaks";
 
-export function Hero({ tweaks }) {
+type HeroProps = { tweaks: typeof HAYA_TWEAKS_DEFAULTS };
+
+export function Hero({ tweaks }: HeroProps) {
   const dashRef = React.useRef<HTMLDivElement | null>(null);
   const [tilt, setTilt] = React.useState({ x: 0, y: 0 });
 
-  const onMove = (e) => {
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!dashRef.current) return;
     const r = dashRef.current.getBoundingClientRect();
     const cx = (e.clientX - r.left) / r.width - 0.5;
     const cy = (e.clientY - r.top) / r.height - 0.5;
     setTilt({ x: cy * -3, y: cx * 4 });
   };
+
   const onLeave = () => setTilt({ x: 0, y: 0 });
 
   return (
     <section className="hero">
-      <div className="container">
+      <div className="max-md:py-0 max-md:px-5">
+        <Image
+          alt="Haya owl"
+          src="/images/owl.png"
+          // width={800}
+          // height={600}
+          className="absolute -z-50 inset-0 object-cover"
+          fill
+        />
         <div className="eyebrow">
           <span className="dot"></span>
           PRIVATE BETA · INVITE ONLY
@@ -34,7 +47,7 @@ export function Hero({ tweaks }) {
         <div className="hero-ctas">
           <a href="#try" className="btn btn-primary">
             Run a free audit
-            <ArrowRight />
+            <ArrowRightIcon />
           </a>
           <a href="#how" className="btn btn-ghost">
             How it works
@@ -42,11 +55,13 @@ export function Hero({ tweaks }) {
         </div>
 
         <div
+          role="none"
           className="dashboard-wrap"
           onMouseMove={onMove}
           onMouseLeave={onLeave}
         >
-          {tweaks.heroAnim !== "none" && <div className="dashboard-glow" />}
+          {/* {tweaks.heroAnim !== "none" && <div className="dashboard-glow" />} */}
+
           <div
             ref={dashRef}
             className="dashboard"
@@ -123,8 +138,11 @@ function DashboardSide() {
   return (
     <div className="db-side">
       <div className="db-side-label">Workspace</div>
-      {items.map((it, i) => (
-        <div key={i} className={`db-side-item ${it.active ? "active" : ""}`}>
+      {items.map((it) => (
+        <div
+          key={it.label}
+          className={`db-side-item ${it.active ? "active" : ""}`}
+        >
           <span
             style={{
               width: 14,
@@ -145,9 +163,9 @@ function DashboardSide() {
         { c: "#f87171", t: "High", n: 4 },
         { c: "#fbbf24", t: "Medium", n: 7 },
         { c: "#34d399", t: "Low", n: 12 },
-      ].map((s, i) => (
+      ].map((s) => (
         <div
-          key={i}
+          key={s.c + s.t + s.n}
           className="db-side-item"
           style={{ justifyContent: "space-between" }}
         >
@@ -173,7 +191,11 @@ function DashboardSide() {
   );
 }
 
-function DashboardMain({ heroAnim }) {
+function DashboardMain({
+  heroAnim,
+}: {
+  heroAnim: HeroProps["tweaks"]["heroAnim"];
+}) {
   return (
     <div className="db-main">
       <div className="db-main-tabs">
@@ -231,7 +253,19 @@ function DashboardMain({ heroAnim }) {
   );
 }
 
-function FrictionMarker({ top, left, delay, severity, label }) {
+function FrictionMarker({
+  top,
+  left,
+  delay,
+  severity,
+  label,
+}: {
+  top: string;
+  left: string;
+  delay: number;
+  severity: string;
+  label: string;
+}) {
   return (
     <div
       className="friction"
@@ -280,7 +314,7 @@ function DashboardRight() {
         <span className="count">23 issues</span>
       </div>
       {findings.map((f, i) => (
-        <div key={i} className="db-finding">
+        <div key={`${f.sev}-${i}`} className="db-finding">
           <div className="db-finding-h">
             <span className={`sev-chip ${f.sev}`}>{f.sev}</span>
             <span className="db-finding-title">{f.t}</span>

@@ -20,12 +20,13 @@ export function HomePage() {
   // Apply theme variables based on tweaks
   React.useEffect(() => {
     const root = document.documentElement;
-    const accents = {
+    const accents: Record<string, { c: string; g: string }> = {
       cyan: { c: "#22d3ee", g: "rgba(34,211,238,0.35)" },
       green: { c: "#34d399", g: "rgba(52,211,153,0.35)" },
       amber: { c: "#fbbf24", g: "rgba(251,191,36,0.35)" },
       pink: { c: "#f472b6", g: "rgba(244,114,182,0.35)" },
     };
+
     const a = accents[tweaks.accent] || accents.cyan;
     root.style.setProperty("--accent", a.c);
     root.style.setProperty("--accent-glow", a.g);
